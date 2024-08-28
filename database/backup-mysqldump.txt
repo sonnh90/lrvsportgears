@@ -1,0 +1,23 @@
+
+
+1. Project directory: E:\WebPlatforms\Apache-2.4.59\htdocs\lrvsportgears\
+2. Database directory: E:\WebPlatforms\Apache-2.4.59\htdocs\lrvsportgears>database\
+
+3. Using mysqldump tool to dump the database schema
+- Using any admin database - i.e root, admin
+$ mysqldump -uroot -pAbcd!234 lrvsportgears > lrvsportgears-dump-20240828.sql
+
+-------------
+1. Permission issues with database accounts:
+- If not having privileges, run the following command to grant permission
+
+1.1. Grant all permissions to all database schemas for specific accounts:
+- Run in mysql terminal:
+GRANT ALL ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'Abcd!234' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'Abcd!234' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+1.2. Grant permission to 'lrvsportgears' for specific accounts:
+GRANT ALL ON `lrvsportgears`.* TO 'laradbadmin'@'localhost' IDENTIFIED BY 'Abcd!234' WITH GRANT OPTION;
+GRANT ALL ON `lrvsportgears`.* TO 'larauser'@'localhost' IDENTIFIED BY 'Abcd!234' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
