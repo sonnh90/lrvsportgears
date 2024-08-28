@@ -153,6 +153,90 @@ LOCK TABLES `jobs` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `lrvspg_brands`
+--
+
+DROP TABLE IF EXISTS `lrvspg_brands`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_brands` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_name` varchar(255) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_brands`
+--
+
+LOCK TABLES `lrvspg_brands` WRITE;
+/*!40000 ALTER TABLE `lrvspg_brands` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_brands` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_cart_items`
+--
+
+DROP TABLE IF EXISTS `lrvspg_cart_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_cart_items` (
+  `it` int(11) NOT NULL AUTO_INCREMENT,
+  `cart_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`it`),
+  KEY `cart_id` (`cart_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `lrvspg_cart_items_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `lrvspg_carts` (`id`),
+  CONSTRAINT `lrvspg_cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `lrvspg_products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_cart_items`
+--
+
+LOCK TABLES `lrvspg_cart_items` WRITE;
+/*!40000 ALTER TABLE `lrvspg_cart_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_cart_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_carts`
+--
+
+DROP TABLE IF EXISTS `lrvspg_carts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_carts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `lrvspg_carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `lrvspg_users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_carts`
+--
+
+LOCK TABLES `lrvspg_carts` WRITE;
+/*!40000 ALTER TABLE `lrvspg_carts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_carts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `lrvspg_categories`
 --
 
@@ -179,6 +263,68 @@ CREATE TABLE `lrvspg_categories` (
 LOCK TABLES `lrvspg_categories` WRITE;
 /*!40000 ALTER TABLE `lrvspg_categories` DISABLE KEYS */;
 /*!40000 ALTER TABLE `lrvspg_categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_discount_coupons`
+--
+
+DROP TABLE IF EXISTS `lrvspg_discount_coupons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_discount_coupons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `discount_code` varchar(50) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `discount_type` enum('Percentage','Fixed Amount') NOT NULL,
+  `discount_value` decimal(30,3) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `usage_limit` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `discount_code` (`discount_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_discount_coupons`
+--
+
+LOCK TABLES `lrvspg_discount_coupons` WRITE;
+/*!40000 ALTER TABLE `lrvspg_discount_coupons` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_discount_coupons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_inventory`
+--
+
+DROP TABLE IF EXISTS `lrvspg_inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_inventory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `warehouse_location` varchar(255) DEFAULT NULL,
+  `stock_level` int(11) DEFAULT NULL,
+  `reorder_level` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `lrvspg_inventory_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `lrvspg_products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_inventory`
+--
+
+LOCK TABLES `lrvspg_inventory` WRITE;
+/*!40000 ALTER TABLE `lrvspg_inventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_inventory` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -246,6 +392,37 @@ CREATE TABLE `lrvspg_orders` (
 LOCK TABLES `lrvspg_orders` WRITE;
 /*!40000 ALTER TABLE `lrvspg_orders` DISABLE KEYS */;
 /*!40000 ALTER TABLE `lrvspg_orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_payments`
+--
+
+DROP TABLE IF EXISTS `lrvspg_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL,
+  `payment_date` datetime DEFAULT NULL,
+  `payment_amount` decimal(30,3) DEFAULT NULL,
+  `payment_status` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  CONSTRAINT `lrvspg_payments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `lrvspg_orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_payments`
+--
+
+LOCK TABLES `lrvspg_payments` WRITE;
+/*!40000 ALTER TABLE `lrvspg_payments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_payments` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -351,6 +528,34 @@ LOCK TABLES `lrvspg_products` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `lrvspg_shipping_methods`
+--
+
+DROP TABLE IF EXISTS `lrvspg_shipping_methods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_shipping_methods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `method_name` varchar(255) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `cost` decimal(30,3) NOT NULL,
+  `delivery_time` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_shipping_methods`
+--
+
+LOCK TABLES `lrvspg_shipping_methods` WRITE;
+/*!40000 ALTER TABLE `lrvspg_shipping_methods` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_shipping_methods` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `lrvspg_users`
 --
 
@@ -381,6 +586,63 @@ CREATE TABLE `lrvspg_users` (
 LOCK TABLES `lrvspg_users` WRITE;
 /*!40000 ALTER TABLE `lrvspg_users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `lrvspg_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_wishlist_items`
+--
+
+DROP TABLE IF EXISTS `lrvspg_wishlist_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_wishlist_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wishlist_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `wishlist_id` (`wishlist_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `lrvspg_wishlist_items_ibfk_1` FOREIGN KEY (`wishlist_id`) REFERENCES `lrvspg_wishlists` (`id`),
+  CONSTRAINT `lrvspg_wishlist_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `lrvspg_products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_wishlist_items`
+--
+
+LOCK TABLES `lrvspg_wishlist_items` WRITE;
+/*!40000 ALTER TABLE `lrvspg_wishlist_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_wishlist_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lrvspg_wishlists`
+--
+
+DROP TABLE IF EXISTS `lrvspg_wishlists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lrvspg_wishlists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `lrvspg_wishlists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `lrvspg_users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lrvspg_wishlists`
+--
+
+LOCK TABLES `lrvspg_wishlists` WRITE;
+/*!40000 ALTER TABLE `lrvspg_wishlists` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lrvspg_wishlists` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -505,4 +767,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-28 14:13:44
+-- Dump completed on 2024-08-28 15:41:21
